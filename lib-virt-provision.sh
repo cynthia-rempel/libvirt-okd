@@ -1,29 +1,41 @@
 #!/bin/bash
 
-unxz --version || { echo 'unxz --version failed' ; exit 1; }
+virsh --version || { echo 'virsh --version failed' ; exit 1; }
+unxz --version  || { echo 'unxz  --version failed' ; exit 1; }
+wget --version  || { echo 'wget  --version failed' ; exit 1; }
+
 export BASE_IMAGE_PATH=$PWD/images/base
 export FCOS_VERSION=32.20200615.2.2
 export BASE_IMAGE_NAME=fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2
 
+# Don't download again if it's already downloaded
 wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
-unxz fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+# Keep the old file, so we don't re-download them
+unxz --keep fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+
+cp fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2 fedora-coreos-qemu.x86_64.qcow2
+
+qemu-img rebase -u -b "" fedora-coreos-qemu.x86_64.qcow2
 
 # Make sure NETWORK matches the network name in virt-net.xml
 export NETWORK=okd-net
 
 # https://wiki.libvirt.org/page/VirtualNetworking#virsh_XML_commands
-virsh net-define --file ./okd-net.xml
+virsh net-define --file $PWD/okd-net.xml
+virsh net-start okd-net
 
 # Load Balancer
 echo "provisioning load balancer"
 
-export IGNITION_PATH=./ignition
+export IGNITION_PATH=$PWD/ignition
+sudo chcon -t svirt_home_t $PWD/ignition/*
+sudo chcon -t svirt_home_t $PWD/*
+
 export IGNITION_FILE=lb.ign
 
 # Make sure MAC_ADDRESS matches mac in vir-net.xml
 export MAC_ADDRESS=00:1c:14:00:00:02
-export SERIAL_NO=WD-WMAP9A966102
 export VM_NAME=lb
 export VM_RAM=2048
 export VM_CPU=2
@@ -37,8 +49,8 @@ virt-install \
     --os-variant=fedora32 \
     --graphics=none \
     --import \
-    --network $NETWORK,mac=$MAC_ADDRESS \
-    --disk size=1,readonly=false,backing_store=$BASE_IMAGE_NAME/$BASE_IMAGE_NAME,serial=$SERIAL_NO \
+    --network network=$NETWORK,mac=$MAC_ADDRESS \
+    --disk size=4,readonly=false,path=$PWD/fedora-coreos-qemu.x86_64.qcow2,format=qcow2,bus=virtio \
  --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
 echo "provisioning bootstrap"
@@ -51,8 +63,18 @@ export VM_NAME=bootstrap
 export VM_RAM=2048
 export VM_CPU=2
 # Create the VM with virt-install
-
-echo "provisioning DNS"
+virt-install \
+    --connect qemu:///system \
+    --name=$VM_NAME \
+    --ram=$VM_RAM \
+    --vcpus=$VM_CPU \
+    --os-type=linux \
+    --os-variant=fedora32 \
+    --graphics=none \
+    --import \
+    --network $NETWORK,mac=$MAC_ADDRESS \
+    --disk size=1,readonly=false,backing_store=$BASE_IMAGE_NAME,serial=$SERIAL_NO \
+ --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"echo "provisioning DNS"
 
 export IGNITION_PATH=./ignition
 export IGNITION_FILE=dns.ign
