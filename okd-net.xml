@@ -1,0 +1,24 @@
+<network>
+  <name>okd-net</name>
+  <bridge name="virbr0"/>
+  <forward mode="nat"/>
+  <ip address="10.20.15.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start='10.20.15.100' end='10.20.15.254'/>
+      <host mac='00:1c:14:00:00:02' name='lb.okd.example.com' ip='10.20.15.2'/>
+      <host mac='00:1c:14:00:00:03' name='bootstrap.okd.example.com' ip='10.20.15.3'/>
+      <host mac='00:1c:14:00:00:04' name='dns.okd.example.com' ip='10.20.15.4'/>
+      <host mac='00:1c:14:00:00:05' name='ignition.okd.example.com' ip='10.20.15.5'/>
+      <host mac='00:1c:14:00:00:11' name='master1.okd.example.com' ip='10.20.15.11'/>
+      <host mac='00:1c:14:00:00:12' name='master2.okd.example.com' ip='10.20.15.12'/>
+      <host mac='00:1c:14:00:00:11' name='master3.okd.example.com' ip='10.20.15.13'/>
+      <host mac='00:1c:14:00:00:41' name='worker1.okd.example.com' ip='10.20.15.41'/>
+      <host mac='00:1c:14:00:00:42' name='worker2.okd.example.com' ip='10.20.15.42'/>
+      <host mac='00:1c:14:00:00:43' name='worker3.okd.example.com' ip='10.20.15.43'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+
+
