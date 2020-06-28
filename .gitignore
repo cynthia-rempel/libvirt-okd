@@ -1,2 +1,4 @@
 fedora-coreos-*.xz
 fedora-coreos-*.qcow2
+images
+images/*

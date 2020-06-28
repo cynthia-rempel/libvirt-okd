@@ -14,9 +14,9 @@ wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/b
 # Keep the old file, so we don't re-download them
 unxz --keep fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
-cp fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2 fedora-coreos-qemu.x86_64.qcow2
+mkdir -p images
 
-qemu-img rebase -u -b "" fedora-coreos-qemu.x86_64.qcow2
+cp fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2 fedora-coreos-qemu.x86_64.qcow2
 
 # Make sure NETWORK matches the network name in virt-net.xml
 export NETWORK=okd-net
@@ -32,14 +32,136 @@ export IGNITION_PATH=$PWD/ignition
 sudo chcon -t svirt_home_t $PWD/ignition/*
 sudo chcon -t svirt_home_t $PWD/*
 
-export IGNITION_FILE=lb.ign
-
-# Make sure MAC_ADDRESS matches mac in vir-net.xml
-export MAC_ADDRESS=00:1c:14:00:00:02
 export VM_NAME=lb
+# Make sure MAC_ADDRESS matches mac in okd-net.xml
+export MAC_ADDRESS=00:1c:14:00:00:02
+export VM_RAM=2048
+export IGNITION_FILE=lb.ign
+export VM_CPU=2
+
+cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
+sudo chcon -t svirt_home_t $PWD/images/*
+
+# Create the VM with virt-install
+virt-install \
+    --connect qemu:///system \
+    --name=$VM_NAME \
+    --ram=$VM_RAM \
+    --vcpus=$VM_CPU \
+    --os-type=linux \
+    --os-variant=fedora32 \
+    --graphics=none \
+    --import \
+    --network network=$NETWORK,mac=$MAC_ADDRESS \
+    --noautoconsole \
+    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
+ --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
+sleep 120
+curl -kv https://10.20.15.2:22
+exit 0
+
+echo "provisioning bootstrap"
+
+export IGNITION_FILE=bootstrap.ign
+export MAC_ADDRESS=00:1c:14:00:00:03
+export VM_NAME=bootstrap
+export VM_RAM=2048
+export VM_CPU=2
+
+cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
+sudo chcon -t svirt_home_t $PWD/images/*
+
+# Create the VM with virt-install
+
+virt-install \
+    --connect qemu:///system \
+    --name=$VM_NAME \
+    --ram=$VM_RAM \
+    --vcpus=$VM_CPU \
+    --os-type=linux \
+    --os-variant=fedora32 \
+    --graphics=none \
+    --import \
+    --network network=$NETWORK,mac=$MAC_ADDRESS \
+    --noautoconsole \
+    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
+ --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
+
+export IGNITION_FILE=dns.ign
+export MAC_ADDRESS=00:1c:14:00:00:04
+export VM_NAME=dns
 export VM_RAM=2048
 export VM_CPU=2
 # Create the VM with virt-install
+
+echo "provisioning ignition"
+
+export IGNITION_FILE=ignition.ign
+export MAC_ADDRESS=00:1c:14:00:00:05
+export VM_NAME=ignition
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+echo "provisioning master1"
+
+export IGNITION_FILE=master.ign
+export MAC_ADDRESS=00:1c:14:00:00:11
+export VM_NAME=master1
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+echo "provisioning master2"
+
+export IGNITION_FILE=config.ign
+export MAC_ADDRESS=00:1c:14:00:00:12
+export VM_NAME=master2
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+echo "provisioning master3"
+export IGNITION_FILE=config.ign
+export MAC_ADDRESS=00:1c:14:00:00:13
+export VM_NAME=master3
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+echo "provisioning worker1"
+export IGNITION_FILE=worker.ign
+export MAC_ADDRESS=00:1c:14:00:00:41
+export VM_NAME=worker1
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+
+#
+echo "provisioning worker2"
+export IGNITION_FILE=worker.ign
+export MAC_ADDRESS=00:1c:14:00:00:42
+export VM_NAME=worker2
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+echo "provisioning worker3"
+
+export IGNITION_FILE=worker.ign
+export MAC_ADDRESS=00:1c:14:00:00:43
+export VM_NAME=worker3
+export VM_RAM=2048
+export VM_CPU=2
+# Create the VM with virt-install
+
+# test the connection
+#   ssh -i ./libvirt-okd-key core@10.20.15.2
+
+
+####
+#### Shows output
 virt-install \
     --connect qemu:///system \
     --name=$VM_NAME \
@@ -52,117 +174,7 @@ virt-install \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
     --disk size=4,readonly=false,path=$PWD/fedora-coreos-qemu.x86_64.qcow2,format=qcow2,bus=virtio \
  --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
-
-echo "provisioning bootstrap"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=bootstrap.ign
-export MAC_ADDRESS=00:1c:14:00:00:03
-export SERIAL_NO=WD-WMAP9A966103
-export VM_NAME=bootstrap
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-virt-install \
-    --connect qemu:///system \
-    --name=$VM_NAME \
-    --ram=$VM_RAM \
-    --vcpus=$VM_CPU \
-    --os-type=linux \
-    --os-variant=fedora32 \
-    --graphics=none \
-    --import \
-    --network $NETWORK,mac=$MAC_ADDRESS \
-    --disk size=1,readonly=false,backing_store=$BASE_IMAGE_NAME,serial=$SERIAL_NO \
- --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"echo "provisioning DNS"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=dns.ign
-export MAC_ADDRESS=00:1c:14:00:00:04
-export SERIAL_NO=WD-WMAP9A966104
-export VM_NAME=dns
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning ignition"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=ignition.ign
-export MAC_ADDRESS=00:1c:14:00:00:05
-export SERIAL_NO=WD-WMAP9A966105
-export VM_NAME=ignition
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning master1"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=master.ign
-export MAC_ADDRESS=00:1c:14:00:00:11
-export SERIAL_NO=WD-WMAP9A966111
-export VM_NAME=master1
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning master2"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=config.ign
-export MAC_ADDRESS=00:1c:14:00:00:12
-export SERIAL_NO=WD-WMAP9A966112
-export VM_NAME=master2
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning master3"
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=config.ign
-export MAC_ADDRESS=00:1c:14:00:00:13
-export SERIAL_NO=WD-WMAP9A966113
-export VM_NAME=master3
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning worker1"
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=worker.ign
-export MAC_ADDRESS=00:1c:14:00:00:41
-export SERIAL_NO=WD-WMAP9A966141
-export VM_NAME=worker1
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-
-#
-echo "provisioning worker2"
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=worker.ign
-export MAC_ADDRESS=00:1c:14:00:00:42
-export SERIAL_NO=WD-WMAP9A966142
-export VM_NAME=worker2
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-echo "provisioning worker3"
-
-export IGNITION_PATH=./ignition
-export IGNITION_FILE=worker.ign
-export MAC_ADDRESS=00:1c:14:00:00:43
-export SERIAL_NO=WD-WMAP9A966143
-export VM_NAME=worker3
-export VM_RAM=2048
-export VM_CPU=2
-# Create the VM with virt-install
-
-# test the connection
-#   ssh -i ./libvirt-okd-key core@10.20.15.2
+####
 
 
 # Reference:
