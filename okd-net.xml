@@ -2,13 +2,66 @@
   <name>okd-net</name>
   <bridge name="virbr1"/>
   <forward mode="nat"/>
+  <domain name="example.com"/>
+  <dns>
+    <txt name="example" value="example value"/>
+    <forwarder addr="8.8.8.8"/>
+    <forwarder domain='example.com' addr="8.8.4.4"/>
+    <forwarder domain='www.example.com'/>
+    <srv service='name' protocol='tcp' domain='_etcd-server-ssl._tcp.okd.example.com' target='10.20.15.11,10.20.15.12,10.20.15.13' port='2380' priority='10' weight='10'/>
+    <host ip='10.20.15.2'>
+      <hostname>lb.okd.example.com</hostname>
+      <hostname>api.okd.example.com</hostname>
+      <hostname>api-int.okd.example.com</hostname>
+      <hostname>oauth-openshift.apps.okd.example.com</hostname>
+      <hostname>console-openshift-console.apps.okd.example.com</hostname>
+      <hostname>downloads-openshift-console.apps.okd.example.com</hostname>
+      <hostname>alertmanager-main-openshift-monitoring.apps.okd.example.com</hostname>
+      <hostname>grafana-openshift-monitoring.apps.okd.example.com</hostname>
+      <hostname>prometheus-k8s-openshift-monitoring.apps.okd.example.com</hostname>
+      <hostname>lb</hostname>
+    </host>
+    <host ip='10.20.15.3'>
+      <hostname>bootstrap.okd.example.com</hostname>
+      <hostname>bootstrap</hostname>
+    </host>
+    <host ip='10.20.15.11'>
+      <hostname>master1.okd.example.com</hostname>
+      <hostname>etcd-0.okd.example.com</hostname>
+      <hostname>master1</hostname>
+    </host>
+    <host ip='10.20.15.12'>
+      <hostname>master2.okd.example.com</hostname>
+      <hostname>etcd-1.okd.example.com</hostname>
+      <hostname>master2</hostname>
+    </host>
+    <host ip='10.20.15.13'>
+      <hostname>master3.okd.example.com</hostname>
+      <hostname>etcd-2.okd.example.com</hostname>
+      <hostname>master3</hostname>
+    </host>
+    <host ip='10.20.15.41'>
+      <hostname>worker1.okd.example.com</hostname>
+      <hostname>worker1</hostname>
+    </host>
+    <host ip='10.20.15.42'>
+      <hostname>worker2.okd.example.com</hostname>
+      <hostname>worker2</hostname>
+    </host>
+    <host ip='10.20.15.43'>
+      <hostname>worker3.okd.example.com</hostname>
+      <hostname>worker3</hostname>
+    </host>
+</dns>
   <ip address="10.20.15.1" netmask="255.255.255.0">
     <dhcp>
       <range start='10.20.15.100' end='10.20.15.254'/>
       <host mac='00:1c:14:00:00:02' name='lb.okd.example.com' ip='10.20.15.2'/>
       <host mac='00:1c:14:00:00:03' name='bootstrap.okd.example.com' ip='10.20.15.3'/>
-      <host mac='00:1c:14:00:00:04' name='dns.okd.example.com' ip='10.20.15.4'/>
-      <host mac='00:1c:14:00:00:05' name='ignition.okd.example.com' ip='10.20.15.5'/>
+      <!-- use internal libvirt networking for DNS -->
+      <!-- <host mac='00:1c:14:00:00:04' name='dns.okd.example.com' ip='10.20.15.4'/> -->
+      <!-- use libvirt to serve ignition files -->
+      <!-- <host mac='00:1c:14:00:00:05' name='ignition.okd.example.com' ip='10.20.15.5'/> -->
       <host mac='00:1c:14:00:00:11' name='master1.okd.example.com' ip='10.20.15.11'/>
       <host mac='00:1c:14:00:00:12' name='master2.okd.example.com' ip='10.20.15.12'/>
       <host mac='00:1c:14:00:00:11' name='master3.okd.example.com' ip='10.20.15.13'/>
