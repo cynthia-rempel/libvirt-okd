@@ -1,16 +1,15 @@
 {
   "ignition": { "version": "3.0.0" },
   "passwd": {
-    "users": [{
-      "name": "core",
-      "sshAuthorizedKeys": [
-        "ssh-rsa AAAA..."
-      ]}]},
-  "systemd": {
-    "units": [{
-      "name": "example.service",
-      "enabled": true,
-      "contents": "[Service]\nType=oneshot\nExecStart=/usr/bin/echo Hello World\n\n[Install]\nWantedBy=multi-user.target"
-    }]
+    "users": [
+      {
+        "name": "core",
+        "passwordHash": "$superSecretPasswordHash.",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDImFDC+adflQean0rrEhOwUotC4Lq+DDLPGFGzUdOYUM+GUNLvig7m5zBXDr9lBKD2rGhI8GcK4gAgoQVmUCx+YOUZQsLu5F62AsNQY2Nl69UDvCEHiFk+CsZh5kdz2RWsr2KeOtGdLxtd0foYWjkiySeNAnJCE5kntQu7L76pe8J/A0lm+6EvkwpxF5bSNyFt2+ArCurNqi5gVolU64JfS5o3VQ0bMjDzaef4vSvrDp2rRTbS/gWR/OQYD+s0XoKgT2MfGKYkmDrI+QnUeNU4elR/cuMT5/99R7vlzyysgWtpV+oKcOxLKpOV5SguKLp1X0MZyUA+C1/brCsvIQVhlUObY6pu1JLr3geosmF7evvKRPqigak61cY7SQ/VymNh4TtBhkRLKO+BzAQrF1IlQiedvOTYLTJXSOMxKwIJICot06yo5j/U/kPdukNcuznqBVHatGTCygBupyvBOJQgIhntbMKQun/U6aRmgsinX503Mbv1yBK7ERF4YI7JzwWUPONhvOoXP/OMAfsaFYG2tR5RDYZinZsKzkbg1bVSxv1ZXlKtF0PAStazvPLhoA3u8D0pP1yh/BssuUzAbwfLJlmQ0CaeCPH8ghs6j3iaF++FMaVvZlIz90W/MixcH5+p7NxaLiGnWztcgt9i05DTMW/O5pjTs4FxuIkwjGhbXQ=="
+        ]
+      }
+    ]
   }
 }
+

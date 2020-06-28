@@ -1,0 +1,92 @@
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDC5QFS...
+systemd:
+  units:
+    - name: haproxy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=HAProxy Service
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        User=core
+        TimeoutStartSec=0
+        ExecStartPre=-/bin/podman kill docker.io/library/haproxy:latest
+        ExecStartPre=-/bin/podman rm docker.io/library/haproxy:latest
+        ExecStartPre=/bin/podman pull docker.io/library/haproxy:latest
+        ExecStart=/bin/podman run --name %p -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg docker.io/library/haproxy:latest
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    -
+      # Creates a file /var/helloworld containing a string defined in-line.
+      path: /etc/haproxy/haproxy.cfg
+      overwrite: true
+      contents: |
+      global
+        log         127.0.0.1 local2
+        pidfile     /var/run/haproxy.pid
+        daemon
+        ssl-default-bind-ciphers PROFILE=SYSTEM
+        ssl-default-server-ciphers PROFILE=SYSTEM
+        
+      defaults
+        mode                    http
+        log                     global
+        option                  httplog
+        option                  dontlognull
+        timeout connect         10s
+        timeout client          1m
+        timeout server          1m
+      
+      listen  stats
+        bind *:9000
+        mode            http
+        log             global
+        stats enable
+        stats refresh 30s
+        stats show-node
+      
+      frontend openshift-api-server
+        bind *:6443
+        bind *:443
+        default_backend openshift-api-server
+        mode tcp
+        option tcplog
+      
+      backend openshift-api-server
+        balance source
+        mode tcp
+        server btstrap 10.20.15.3:6443 check
+        server master1 10.20.15.11:6443 check
+        server master2 10.20.15.12:6443 check
+        server master3 10.20.15.13:6443 check
+      
+      frontend machine-config-server
+        bind *:22623
+        default_backend machine-config-server
+        mode tcp
+        option tcplog
+      
+      backend machine-config-server
+        balance source
+        mode tcp
+        server btstrap 10.20.15.3:22623 check
+        server master1 10.20.15.11:22623 check
+        server master2 10.20.15.12:22623 check
+        server master3 10.20.15.13:22623 check
+      # Sets the file mode to 0644 (readable by all, also writable by the
+      # owner).
+      mode: 0644
+      user:
+        # The owner uid and group are defined by their numerical IDs.
+        id: 1000
+      group:
+        id: 1000

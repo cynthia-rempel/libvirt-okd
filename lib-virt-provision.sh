@@ -5,12 +5,13 @@ unxz --version  || { echo 'unxz  --version failed' ; exit 1; }
 wget --version  || { echo 'wget  --version failed' ; exit 1; }
 
 export BASE_IMAGE_PATH=$PWD/images/base
-export FCOS_VERSION=32.20200615.2.2
+export FCOS_VERSION=32.20200601.3.0
 export BASE_IMAGE_NAME=fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2
 
 # Don't download again if it's already downloaded
 wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
+wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 # Keep the old file, so we don't re-download them
 unxz --keep fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
@@ -53,13 +54,10 @@ virt-install \
     --graphics=none \
     --import \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
-    --noautoconsole \
     --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
  --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
-sleep 120
-curl -kv https://10.20.15.2:22
-exit 0
 
+exit 0
 echo "provisioning bootstrap"
 
 export IGNITION_FILE=bootstrap.ign

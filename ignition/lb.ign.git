@@ -1,0 +1,16 @@
+{
+  "ignition": { "version": "3.0.0" },
+  "passwd": {
+    "users": [{
+      "name": "core",
+      "sshAuthorizedKeys": [
+        "ssh-rsa CORE_PUBLIC_KEY"
+      ]}]},
+  "systemd": {
+    "units": [{
+      "name": "example.service",
+      "enabled": true,
+      "contents": "[Service]\nType=oneshot\nExecStart=/usr/bin/echo Hello World\n\n[Install]\nWantedBy=multi-user.target"
+    }]
+  }
+}
