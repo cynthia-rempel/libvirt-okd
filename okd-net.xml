@@ -7,7 +7,7 @@
     <!-- <txt name="example" value="example value"/>
     <forwarder addr="8.8.8.8"/>
     <forwarder domain='example.com' addr="8.8.4.4"/>
-    <forwarder domain='www.example.com'/> -->
+    <forwarder domain='www.example.com'/>
     <srv service='name' protocol='tcp' domain='_etcd-server-ssl._tcp.okd.example.com' target='10.20.15.11,10.20.15.12,10.20.15.13' port='2380' priority='10' weight='10'/>
     <host ip='10.20.15.2'>
       <hostname>lb.okd.example.com</hostname>
@@ -51,7 +51,7 @@
     <host ip='10.20.15.43'>
       <hostname>worker3.okd.example.com</hostname>
       <hostname>worker3</hostname>
-    </host>
+    </host> -->
 </dns>
   <ip address="10.20.15.1" netmask="255.255.255.0">
     <dhcp>
