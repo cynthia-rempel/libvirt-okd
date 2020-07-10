@@ -21,7 +21,9 @@ systemd:
         ExecStartPre=-/bin/podman kill docker.io/library/haproxy:latest
         ExecStartPre=-/bin/podman rm docker.io/library/haproxy:latest
         ExecStartPre=/bin/podman pull docker.io/library/haproxy:latest
-        ExecStart=/bin/podman run --name %p -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg docker.io/library/haproxy:latest
+        ExecStart=/bin/podman run --name %p \
+          -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg \
+          docker.io/library/haproxy:latest
         [Install]
         WantedBy=multi-user.target
 storage:
