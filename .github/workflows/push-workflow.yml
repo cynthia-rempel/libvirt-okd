@@ -25,6 +25,7 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt-daemon
         sudo virt-xml-validate okd-net.xml network
+        sudo virt-xml-validate ./libvirt-xml/lb-libvirt.xml domain
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
