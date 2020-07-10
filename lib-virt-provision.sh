@@ -43,6 +43,7 @@ export VM_CPU=2
 
 # cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
 sudo chcon -t svirt_home_t $PWD/images/*
+ls $IGNITION_PATH
 
 # Create the VM with virt-install
 # use fedora28, as that's the newest that ships automatically with github-actions-ubuntu
