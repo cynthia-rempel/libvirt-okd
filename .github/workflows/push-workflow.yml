@@ -39,9 +39,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system apt-file
-        sudo DEBIAN_FRONTEND=noninteractive apt-file update
-        sudo apt-file find osinfo-query
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system libosinfo-bin
         sudo systemctl start libvirtd
         sudo osinfo-query os
         sudo bash -x lib-virt-provision.sh
