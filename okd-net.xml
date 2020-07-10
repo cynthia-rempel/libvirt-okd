@@ -9,9 +9,10 @@
     <forwarder domain='example.com' addr="8.8.4.4"/>
     <forwarder domain='www.example.com'/> -->
     <!-- <srv service='etcd' protocol='tcp' domain='_etcd-server-ssl._tcp.okd.example.com' target='10.20.15.11,10.20.15.12,10.20.15.13' port='2380' priority='10' weight='10'/> -->
-    <srv service='_etcd-server-ssl._tcp.okd.example.com' protocol='tcp' target='etcd-0.okd.example.com'
-    port='2380' priority='0' weight='10'/>
-    <!-- <host ip='10.20.15.2'>
+    <srv service='_etcd-server-ssl._tcp.okd.example.com' protocol='tcp' target='etcd-1.okd.example.com' port='2380' priority='0' weight='10'/>
+    <srv service='_etcd-server-ssl._tcp.okd.example.com' protocol='tcp' target='etcd-2.okd.example.com' port='2380' priority='0' weight='10'/>
+    <srv service='_etcd-server-ssl._tcp.okd.example.com' protocol='tcp' target='etcd-3.okd.example.com' port='2380' priority='0' weight='10'/>
+    <host ip='10.20.15.2'>
       <hostname>lb.okd.example.com</hostname>
       <hostname>api.okd.example.com</hostname>
       <hostname>api-int.okd.example.com</hostname>
@@ -22,8 +23,8 @@
       <hostname>grafana-openshift-monitoring.apps.okd.example.com</hostname>
       <hostname>prometheus-k8s-openshift-monitoring.apps.okd.example.com</hostname>
       <hostname>lb</hostname>
-    </host>
-    <host ip='10.20.15.3'>
+    </host> 
+    <!-- <host ip='10.20.15.3'>
       <hostname>bootstrap.okd.example.com</hostname>
       <hostname>bootstrap</hostname>
     </host>
