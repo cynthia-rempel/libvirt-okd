@@ -61,7 +61,7 @@ virt-install \
 # --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
 #    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
-
+sudo virsh dumpxml lb
 exit 0
 echo "provisioning bootstrap"
 
