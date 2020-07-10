@@ -41,6 +41,7 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system 
         sudo systemctl start libvirtd
+        sudo osinfo-query os
         sudo bash -x lib-virt-provision.sh
         # apt-file
         # sudo DEBIAN_FRONTEND=noninteractive apt-file update
