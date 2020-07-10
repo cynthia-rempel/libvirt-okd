@@ -15,12 +15,12 @@ jobs:
   lintAllTheThings:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: yaml-lint
-      uses: ibiqlik/action-yamllint@v1
-      with:
-        file_or_dir: ignition/*.yaml
-        # config_file: .yamllint.yml
+    - uses: actions/checkout@v2
+    - name: Fedora Core Config Transpiler
+      run: |
+        podman pull quay.io/coreos/fcct:release
+        podman run --rm -v ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc > lb.ign
+        cat lb.ign
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
