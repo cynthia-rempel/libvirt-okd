@@ -25,6 +25,7 @@ jobs:
       #  sudo DEBIAN_FRONTEND=noninteractive apt-file update
       #  sudo apt-file find /usr/share/libvirt/schemas/network.rng
       run: |
+        sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt-daemon
         sudo virt-xml-validate okd-net.xml network
   # This workflow contains a single job called "build"
