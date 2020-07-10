@@ -22,7 +22,7 @@ jobs:
         sudo bash -c "podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc" 
     - name: Virt XML Validate
       run: |
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt0
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt-daemon
         sudo DEBIAN_FRONTEND=noninteractive apt-get install apt-file
         sudo DEBIAN_FRONTEND=noninteractive apt-file update
         sudo apt-file find /usr/share/libvirt/schemas/network.rng
