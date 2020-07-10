@@ -45,13 +45,14 @@ export VM_CPU=2
 sudo chcon -t svirt_home_t $PWD/images/*
 
 # Create the VM with virt-install
+# use fedora28, as that's the newest that ships automatically with github-actions-ubuntu
 virt-install \
     --connect qemu:///system \
     --name=$VM_NAME \
     --ram=$VM_RAM \
     --vcpus=$VM_CPU \
     --os-type=linux \
-    --os-variant=fedora32 \
+    --os-variant=fedora28 \
     --graphics=none \
     --import \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
