@@ -12,6 +12,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  lintAllTheThings:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: yaml-lint
+      uses: ibiqlik/action-yamllint@v1
+      with:
+        file_or_dir: ignition/*.yaml
+        # config_file: .yamllint.yml
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
