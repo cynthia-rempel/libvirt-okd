@@ -39,10 +39,12 @@ jobs:
     - name: Run a multi-line script
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst apt-file
+        sudo DEBIAN_FRONTEND=noninteractive apt-file update
+        sudo apt-file find libvirtd.service
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
         # apt-file
         # sudo DEBIAN_FRONTEND=noninteractive apt-file update
-        # sudo apt-file find virt-install
+        # sudo apt-file find libvirtd.service
         
