@@ -3,8 +3,8 @@
   <bridge name="virbr1"/>
   <forward mode="nat"/>
   <domain name="example.com"/>
-  <!-- <dns>
-    <txt name="example" value="example value"/>
+  <dns enable="yes" forwardPlainNames="no">
+    <!-- <txt name="example" value="example value"/>
     <forwarder addr="8.8.8.8"/>
     <forwarder domain='example.com' addr="8.8.4.4"/>
     <forwarder domain='www.example.com'/>
@@ -51,8 +51,8 @@
     <host ip='10.20.15.43'>
       <hostname>worker3.okd.example.com</hostname>
       <hostname>worker3</hostname>
-    </host>
-</dns> -->
+    </host> -->
+</dns>
   <ip address="10.20.15.1" netmask="255.255.255.0">
     <dhcp>
       <range start='10.20.15.100' end='10.20.15.254'/>
