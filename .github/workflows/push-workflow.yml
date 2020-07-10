@@ -21,9 +21,6 @@ jobs:
         podman pull quay.io/coreos/fcct:release
         sudo bash -c "podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc" 
     - name: Virt XML Validate
-      #  sudo DEBIAN_FRONTEND=noninteractive apt-get install apt-file
-      #  sudo DEBIAN_FRONTEND=noninteractive apt-file update
-      #  sudo apt-file find /usr/share/libvirt/schemas/network.rng
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt-daemon
@@ -45,4 +42,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Run a multi-line script
       run: |
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install apt-file
+        sudo DEBIAN_FRONTEND=noninteractive apt-file update
+        sudo apt-file find virsh
         sudo bash -x lib-virt-provision.sh
