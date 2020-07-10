@@ -1,17 +1,18 @@
 #!/bin/bash
 
-virsh --version || { echo 'virsh --version failed' ; exit 1; }
-unxz --version  || { echo 'unxz  --version failed' ; exit 1; }
-wget --version  || { echo 'wget  --version failed' ; exit 1; }
+virsh --version        || { echo 'virsh --version failed' ; exit 1; }
+virt-install --version || { echo 'virsh --version failed' ; exit 1; }
+unxz --version         || { echo 'unxz  --version failed' ; exit 1; }
+wget --version         || { echo 'wget  --version failed' ; exit 1; }
 
 export BASE_IMAGE_PATH=$PWD/images/base
 export FCOS_VERSION=32.20200601.3.0
 export BASE_IMAGE_NAME=fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2
 
 # Don't download again if it's already downloaded
-wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+# wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
-wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+# wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 # Keep the old file, so we don't re-download them
 unxz --keep fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
@@ -40,7 +41,7 @@ export VM_RAM=2048
 export IGNITION_FILE=lb.ign
 export VM_CPU=2
 
-cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
+# cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
 sudo chcon -t svirt_home_t $PWD/images/*
 
 # Create the VM with virt-install
@@ -56,6 +57,8 @@ virt-install \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
     --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
  --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
+
+#    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 
 exit 0
 echo "provisioning bootstrap"
