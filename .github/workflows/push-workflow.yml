@@ -23,7 +23,7 @@ jobs:
     - name: Virt XML Validate
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients
-        sudo virt-xml-validate okd-net.xml
+        sudo virt-xml-validate okd-net.xml network
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
