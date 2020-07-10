@@ -28,9 +28,7 @@ systemd:
         WantedBy=multi-user.target
 storage:
   files:
-    -
-      # Creates a file /var/helloworld containing a string defined in-line.
-      path: /etc/haproxy/haproxy.cfg
+    - path: /etc/haproxy/haproxy.cfg
       overwrite: true
       contents: |
         global
