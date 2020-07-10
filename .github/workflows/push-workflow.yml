@@ -21,8 +21,7 @@ jobs:
         pwd
         ls
         podman pull quay.io/coreos/fcct:release
-        podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc > lb.ign
-        cat lb.ign
+        sudo bash -c "podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc" 
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
