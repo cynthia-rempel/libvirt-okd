@@ -1,6 +1,6 @@
-<domain type='qemu' id='1'>
+<domain type='qemu'>
   <name>lb</name>
-  <uuid>d2a67197-b872-46c2-ace9-a3522e17ab98</uuid>
+  <!-- <uuid>d2a67197-b872-46c2-ace9-a3522e17ab98</uuid> -->
   <memory unit='KiB'>2097152</memory>
   <currentMemory unit='KiB'>2097152</currentMemory>
   <vcpu placement='static'>2</vcpu>
@@ -8,10 +8,10 @@
     <partition>/machine</partition>
   </resource>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-bionic'>hvm</type>
+    <type arch='x86_64' machine='pc'>hvm</type>
     <boot dev='hd'/>
   </os>
-  <features>
+  <!-- <features>
     <acpi/>
     <apic/>
   </features>
@@ -26,7 +26,7 @@
   <pm>
     <suspend-to-mem enabled='no'/>
     <suspend-to-disk enabled='no'/>
-  </pm>
+  </pm> -->
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='disk'>
