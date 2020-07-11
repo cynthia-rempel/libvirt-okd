@@ -49,6 +49,7 @@ sudo ls /etc/apparmor.d/abstractions/
 sudo echo "/var/lib/libvirt/images/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
 sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
 sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/ignition/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+systemctl restart apparmor.service
 
 sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
 # sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
