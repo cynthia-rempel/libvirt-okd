@@ -11,10 +11,6 @@
     <boot dev='hd'/>
     <smbios mode='sysinfo'/>
   </os>
-  <smbios type='fwcfg'>
-    <entry name='opt/com.example/name'>example value</entry>
-    <entry name='opt/com.coreos/config' file='/tmp/provision.ign'/>
-  </smbios>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='disk'>
