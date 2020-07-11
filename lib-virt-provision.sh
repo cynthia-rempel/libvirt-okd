@@ -44,6 +44,7 @@ export VM_CPU=2
 # cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
 sudo chcon -t svirt_home_t $PWD/images/*
 ls $IGNITION_PATH
+sudo chcon -t svirt_home_t $IGNITION_PATH/$IGNITION_FILE
 # sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
 # sudo virsh create $PWD/libvirt-xml/lb-libvirt.xml
 
