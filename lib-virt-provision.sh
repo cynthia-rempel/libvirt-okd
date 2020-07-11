@@ -45,6 +45,8 @@ export VM_CPU=2
 sudo chcon -t svirt_home_t $PWD/images/*
 ls $IGNITION_PATH
 sudo cp $IGNITION_PATH/$IGNITION_FILE /tmp
+sudo ls /etc/apparmor.d/abstractions/
+sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
 # sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
 # sudo virsh create $PWD/libvirt-xml/lb-libvirt.xml
 
@@ -61,7 +63,7 @@ sudo virt-install \
     --import \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
     --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
-    --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=/tmp/$IGNITION_FILE"
+    --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
 #    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 sudo virsh dumpxml lb
