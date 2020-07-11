@@ -1,7 +1,6 @@
 #!/bin/bash
 
 virsh --version        || { echo 'virsh --version failed' ; exit 1; }
-virt-install --version || { echo 'virsh --version failed' ; exit 1; }
 unxz --version         || { echo 'unxz  --version failed' ; exit 1; }
 wget --version         || { echo 'wget  --version failed' ; exit 1; }
 
@@ -10,9 +9,9 @@ export FCOS_VERSION=32.20200601.3.0
 export BASE_IMAGE_NAME=fedora-coreos-$FCOS_VERSION-qemu.x86_64.qcow2
 
 # Don't download again if it's already downloaded
-# wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
-# wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+wget --no-clobber https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 # Keep the old file, so we don't re-download them
 unxz --keep fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
 
@@ -31,8 +30,9 @@ virsh net-start okd-net
 echo "provisioning load balancer"
 
 export IGNITION_PATH=$PWD/ignition
-sudo chcon -t svirt_home_t $PWD/ignition/*
-sudo chcon -t svirt_home_t $PWD/*
+sudo semanage fcontext -a -t svirt_home_t "$PWD(/.*)?"
+sudo restorecon -R -v $PWD
+# sudo semanage fcontext -a -t svirt_home_t $PWD/*
 
 export VM_NAME=lb
 # Make sure MAC_ADDRESS matches mac in okd-net.xml
