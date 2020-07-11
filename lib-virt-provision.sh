@@ -3,6 +3,7 @@
 virsh --version        || { echo 'virsh --version failed' ; exit 1; }
 unxz --version         || { echo 'unxz  --version failed' ; exit 1; }
 wget --version         || { echo 'wget  --version failed' ; exit 1; }
+/usr/bin/qemu-system-x86_64  --version         || { echo '/usr/bin/qemu-system-x86_64 --version failed' ; exit 1; }
 
 export BASE_IMAGE_PATH=$PWD/images/base
 export FCOS_VERSION=32.20200601.3.0
