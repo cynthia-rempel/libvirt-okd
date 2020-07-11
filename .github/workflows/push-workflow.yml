@@ -40,10 +40,7 @@ jobs:
     - name: Build the VMs
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system apt-file
-        sudo DEBIAN_FRONTEND=noninteractive apt-file update
-        sudo apt-file find /usr/bin/qemu-system-x86_64
-        exit 1
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system qemu-system-x86
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
         # apt-file
