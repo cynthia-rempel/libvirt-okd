@@ -46,6 +46,10 @@ sudo chcon -t svirt_home_t $PWD/images/*
 ls $IGNITION_PATH
 sudo cp $IGNITION_PATH/$IGNITION_FILE /tmp
 sudo ls /etc/apparmor.d/abstractions/
+sudo echo "/var/lib/libvirt/images/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/ignition/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+
 sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
 # sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
 # sudo virsh create $PWD/libvirt-xml/lb-libvirt.xml
