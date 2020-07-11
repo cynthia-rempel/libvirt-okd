@@ -49,7 +49,7 @@ ls $IGNITION_PATH
 
 # Create the VM with virt-install
 # use fedora28, as that's the newest that ships automatically with github-actions-ubuntu
-virt-install \
+sudo virt-install \
     --connect qemu:///system \
     --name=$VM_NAME \
     --ram=$VM_RAM \
