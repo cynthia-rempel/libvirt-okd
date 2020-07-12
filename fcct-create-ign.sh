@@ -7,7 +7,9 @@ ssh-keygen -b 2048 -t rsa -f ssh.key -q -N "" || { echo 'ssh-keygen  failed' ; e
 # put the key into the yaml files
 PUB_KEY=$(cat ssh.key.pub)
 sed -e s"|ssh-rsa\ veryLongRSAPublicKey|$PUB_KEY|" -i ignition/lb.yaml
-
+mkdir -p okd/install
+sed -e s"|ssh-rsa\ veryLongRSAPublicKey|$PUB_KEY|" okd/install-config.yaml > okd/install/install-config.yaml
+cat okd/install/install-config.yaml
 podman pull quay.io/coreos/fcct:release
 podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc > ignition/lb.ign
 
