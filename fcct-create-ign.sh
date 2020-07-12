@@ -4,6 +4,8 @@
 # converts the ignition/*.yaml files into .ign
 podman --version || { echo 'podman  --version failed' ; exit 1; }
 ssh-keygen -b 2048 -t rsa -f ssh.key -q -N "" || { echo 'ssh-keygen  failed' ; exit 1; }
+PUB_KEY=$(cat ssh.key.pub)
+echo $(PUB_KEY)
 
 # put the public key in the yaml
 exit 1
