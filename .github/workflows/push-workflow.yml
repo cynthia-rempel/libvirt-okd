@@ -48,7 +48,7 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
-        until ssh core@10.20.15.2 echo "hello"
+        until ssh -I ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 echo "hello"
         do
           sleep 10
         done
