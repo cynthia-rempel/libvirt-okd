@@ -12,4 +12,7 @@ sed -e s"|ssh-rsa\ veryLongRSAPublicKey|$PUB_KEY|" okd/install-config.yaml > okd
 cat okd/install/install-config.yaml
 podman pull quay.io/coreos/fcct:release
 podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc > ignition/lb.ign
-
+cd okd/install
+wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-07-12-134038-rc/openshift-install-linux-4.5.0-0.okd-2020-07-12-134038-rc.tar.gz
+tar -xf openshift-install-linux-4.5.0-0.okd-2020-07-12-134038-rc.tar.gz
+ls
