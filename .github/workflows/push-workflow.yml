@@ -43,7 +43,7 @@ jobs:
       run: |
         sudo bash -x ./fcct-create-ign.sh
         mkdir -p .ssh
-        whoami
+        sudo chown runner:runner ssh.key
         cat ssh.key >> .ssh/id_rsa
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo systemctl stop apparmor
