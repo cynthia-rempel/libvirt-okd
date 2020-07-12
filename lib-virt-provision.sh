@@ -62,7 +62,7 @@ sudo virt-install \
 
 sudo virsh dumpxml lb
 sudo ls -lah $PWD/images/
-exit 1
+exit 0
 echo "provisioning bootstrap"
 
 export IGNITION_FILE=bootstrap.ign
