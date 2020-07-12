@@ -41,8 +41,8 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Build the VMs
       run: |
-        exit 1
         sudo bash -x ./fcct-create-ign.sh
+        exit 1
         mkdir -p .ssh
         sudo chown runner:runner ssh.key
         cat ssh.key >> .ssh/id_rsa
