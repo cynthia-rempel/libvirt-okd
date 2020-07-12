@@ -40,6 +40,8 @@ export VM_CPU=2
 
 ls $IGNITION_PATH
 
+cp fedora-coreos-qemu.x86_64.qcow2 $PWD/images/$VM_NAME.qcow2
+
 # Create the VM with virt-install
 # use fedora28, as that's the newest that ships automatically with github-actions-ubuntu
 sudo virt-install \
@@ -52,8 +54,10 @@ sudo virt-install \
     --graphics=none \
     --import \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
-    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
+    --disk readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
     --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
+
+#  --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 
 sudo virsh dumpxml lb
 sudo ls -lah $PWD/images/
