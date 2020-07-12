@@ -10,4 +10,4 @@ sed -e s"|ssh-rsa\ veryLongRSAPublicKey|$PUB_KEY|" -i ignition/lb.yaml
 
 podman pull quay.io/coreos/fcct:release
 podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc > ignition/lb.ign
-cat ignition/lb.ign
+
