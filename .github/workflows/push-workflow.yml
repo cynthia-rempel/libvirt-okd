@@ -42,8 +42,10 @@ jobs:
     - name: Build the VMs
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system qemu-system-x86
-        sudo cp -r ./os-fixes/TEMPLATE.qemu /etc/apparmor.d/libvirt/TEMPLATE.qemu
+        sudo systemctl stop apparmor
+        sudo apt remove --assume-yes --purge apparmor
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
+        # sudo cp -r ./os-fixes/TEMPLATE.qemu /etc/apparmor.d/libvirt/TEMPLATE.qemu
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
         # apt-file
