@@ -54,6 +54,7 @@ sudo virt-install \
     --graphics=none \
     --import \
     --network network=$NETWORK,mac=$MAC_ADDRESS \
+    --noautoconsole \
     --disk readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
     --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
