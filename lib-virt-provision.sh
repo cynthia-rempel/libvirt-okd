@@ -3,7 +3,6 @@
 virsh --version        || { echo 'virsh --version failed' ; exit 1; }
 unxz --version         || { echo 'unxz  --version failed' ; exit 1; }
 wget --version         || { echo 'wget  --version failed' ; exit 1; }
-/usr/bin/qemu-system-x86_64  --version         || { echo '/usr/bin/qemu-system-x86_64 --version failed' ; exit 1; }
 
 export BASE_IMAGE_PATH=$PWD/images/base
 export FCOS_VERSION=32.20200601.3.0
@@ -46,13 +45,13 @@ export VM_CPU=2
 sudo chcon -t svirt_home_t $PWD/images/*
 ls $IGNITION_PATH
 sudo cp $IGNITION_PATH/$IGNITION_FILE /tmp
-sudo ls /etc/apparmor.d/abstractions/
-sudo echo "/var/lib/libvirt/images/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/ignition/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-systemctl restart apparmor.service
+# sudo ls /etc/apparmor.d/abstractions/
+# sudo echo "/var/lib/libvirt/images/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+# sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+# sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/ignition/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
+# systemctl restart apparmor.service
 
-sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
+# sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
 # sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
 # sudo virsh create $PWD/libvirt-xml/lb-libvirt.xml
 
@@ -73,7 +72,7 @@ sudo virt-install \
 
 #    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 sudo virsh dumpxml lb
-exit 0
+exit 1
 echo "provisioning bootstrap"
 
 export IGNITION_FILE=bootstrap.ign
