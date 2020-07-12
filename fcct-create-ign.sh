@@ -3,7 +3,7 @@
 # installs the public key into the ignition/*.yaml files
 # converts the ignition/*.yaml files into .ign
 podman --version || { echo 'podman  --version failed' ; exit 1; }
-ssh-keygen -M generate -O bits=2048 moduli-2048.candidates || { echo 'ssh-keygen  failed' ; exit 1; }
+ssh-keygen -G moduli-2048.candidates -b 2048 || { echo 'ssh-keygen  failed' ; exit 1; }
 ssh-keygen -b 2048 -t rsa -f ssh.key -q -N ""
 
 # put the public key in the yaml
