@@ -42,13 +42,13 @@ jobs:
     - name: Build the VMs
       run: |
         sudo bash -x ./fcct-create-ign.sh
-        exit 1
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo systemctl stop apparmor
         sudo apt remove --assume-yes --purge apparmor
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
+        exit 1
         # apt-file
         # sudo DEBIAN_FRONTEND=noninteractive apt-file update
         # sudo apt-file find /usr/bin/qemu-system-x86_64
