@@ -18,10 +18,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Fedora Core Config Transpiler
       run: |
+        exit 1
         podman pull quay.io/coreos/fcct:release
         sudo bash -c "podman run --rm -v ./ignition/lb.yaml:/config.fcc:z quay.io/coreos/fcct:release --pretty --strict /config.fcc" 
     - name: Virt XML Validate
       run: |
+        exit 1
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients libvirt-daemon
         sudo virt-xml-validate okd-net.xml network
@@ -39,11 +41,12 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Build the VMs
       run: |
+        sudo bash -x ./fcct-create-ign.sh
+        exit 1
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo systemctl stop apparmor
         sudo apt remove --assume-yes --purge apparmor
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
-        # sudo cp -r ./os-fixes/TEMPLATE.qemu /etc/apparmor.d/libvirt/TEMPLATE.qemu
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
         # apt-file
