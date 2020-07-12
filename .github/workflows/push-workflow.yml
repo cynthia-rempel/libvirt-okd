@@ -44,8 +44,6 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system qemu-system-x86
         sudo cp -r ./os-fixes/TEMPLATE.qemu /etc/apparmor.d/libvirt/TEMPLATE.qemu
-        sudo cat /etc/apparmor.d/libvirt/TEMPLATE.lxc
-        exit 1
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
         # apt-file
