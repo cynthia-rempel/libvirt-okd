@@ -30,9 +30,6 @@ virsh net-start okd-net
 echo "provisioning load balancer"
 
 export IGNITION_PATH=$PWD/ignition
-sudo semanage fcontext -a -t svirt_home_t "$PWD(/.*)?"
-sudo restorecon -R -v $PWD
-# sudo semanage fcontext -a -t svirt_home_t $PWD/*
 
 export VM_NAME=lb
 # Make sure MAC_ADDRESS matches mac in okd-net.xml
@@ -41,19 +38,7 @@ export VM_RAM=2048
 export IGNITION_FILE=lb.ign
 export VM_CPU=2
 
-# cp fedora-coreos-qemu.x86_64.qcow2 images/$VM_NAME.qcow2
-sudo chcon -t svirt_home_t $PWD/images/*
 ls $IGNITION_PATH
-sudo cp $IGNITION_PATH/$IGNITION_FILE /tmp
-# sudo ls /etc/apparmor.d/abstractions/
-# sudo echo "/var/lib/libvirt/images/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-# sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-# sudo echo "/home/runner/work/libvirt-okd/libvirt-okd/ignition/* r" >> /etc/apparmor.d/abstractions/libvirt-qemu
-# systemctl restart apparmor.service
-
-# sudo cat /etc/apparmor.d/abstractions/libvirt-qemu
-# sudo qemu-img create -f qcow2 $PWD/images/lb.qcow2 4G
-# sudo virsh create $PWD/libvirt-xml/lb-libvirt.xml
 
 # Create the VM with virt-install
 # use fedora28, as that's the newest that ships automatically with github-actions-ubuntu
@@ -70,8 +55,8 @@ sudo virt-install \
     --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
     --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
-#    --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 sudo virsh dumpxml lb
+sudo ls -lah $PWD/images/
 exit 1
 echo "provisioning bootstrap"
 
