@@ -42,13 +42,15 @@ jobs:
     - name: Build the VMs
       run: |
         sudo bash -x ./fcct-create-ign.sh
+        mkdir -p .ssh
+        cat ssh.key >> .ssh/id_rsa
         sudo DEBIAN_FRONTEND=noninteractive apt-get update
         sudo systemctl stop apparmor
         sudo apt remove --assume-yes --purge apparmor
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
-        until ssh -I ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 echo "hello"
+        until ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 echo "hello"
         do
           sleep 10
         done
