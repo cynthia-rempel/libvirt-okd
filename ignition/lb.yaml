@@ -16,7 +16,7 @@ systemd:
         After=docker.service
         Requires=docker.service
         [Service]
-        User=core
+        User=root
         TimeoutStartSec=0
         ExecStartPre=-/bin/podman kill docker.io/library/haproxy:latest
         ExecStartPre=-/bin/podman rm docker.io/library/haproxy:latest
