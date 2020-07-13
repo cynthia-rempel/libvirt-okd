@@ -22,6 +22,9 @@ systemd:
         ExecStartPre=-/bin/podman rm docker.io/library/haproxy:latest
         ExecStartPre=/bin/podman pull docker.io/library/haproxy:latest
         ExecStart=/bin/podman run --name %p \
+          -p 443:443 \
+          -p 6443:6443 \
+          -p 22623:22623 \
           -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg \
           docker.io/library/haproxy:latest
         [Install]
