@@ -58,6 +58,17 @@ sudo virt-install \
     --disk readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
     --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=$IGNITION_PATH/$IGNITION_FILE"
 
+# check SSH functionality and haproxy status
+until ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 sudo systemctl status haproxy
+do
+  sleep 10
+done
+
+# check internal DNS
+ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 ping -c 1 worker1.okd.example.com
+curl -kv https://10.20.15.2:443
+curl -kv https://10.20.15.2:6443
+curl -kv https://10.20.15.2:22623
 #  --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 
 sudo virsh dumpxml lb
