@@ -61,7 +61,7 @@ sudo virt-install \
 # check SSH functionality and haproxy status
 until ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 sudo systemctl status haproxy
 do
-  sleep 10
+  sleep 60
 done
 
 # check internal DNS
