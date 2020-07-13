@@ -66,12 +66,20 @@ done
 
 # check internal DNS
 ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 ping -c 1 worker1.okd.example.com
+sleep 10
+
+# check for ports being open
+ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 curl -kv https://10.20.15.2:443
+ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 curl -kv https://10.20.15.2:6443
+ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 curl -kv https://10.20.15.2:22623
+
+# check for firewall being open
 curl -kv https://10.20.15.2:443
 curl -kv https://10.20.15.2:6443
 curl -kv https://10.20.15.2:22623
+
 #  --disk size=4,readonly=false,path=$PWD/images/$VM_NAME.qcow2,format=qcow2,bus=virtio \
 
-sudo virsh dumpxml lb
 sudo ls -lah $PWD/images/
 exit 0
 echo "provisioning bootstrap"
