@@ -55,9 +55,6 @@ jobs:
         do
           sleep 10
         done
-        curl -kv https://10.20.15.2:443
-        curl -kv https://10.20.15.2:6443
-        curl -kv https://10.20.15.2:22623
         exit 1
         # apt-file
         # sudo DEBIAN_FRONTEND=noninteractive apt-file update
