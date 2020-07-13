@@ -16,6 +16,8 @@ cd okd
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-07-12-134038-rc/openshift-install-linux-4.5.0-0.okd-2020-07-12-134038-rc.tar.gz
 tar -xf openshift-install-linux-4.5.0-0.okd-2020-07-12-134038-rc.tar.gz
 chmod +x openshift-install
+./openshift-install --dir=install create manifests
+sed -i 's/mastersSchedulable: true/mastersSchedulable: false/g' install/manifests/cluster-scheduler-02-config.yml
 ./openshift-install --dir=install create ignition-configs
 ls install
 
