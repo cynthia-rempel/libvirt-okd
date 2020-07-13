@@ -42,7 +42,6 @@ jobs:
     - name: Build the VMs
       run: |
         sudo bash -x ./fcct-create-ign.sh
-        exit 1
         mkdir -p .ssh
         sudo chown runner:runner ssh.key
         cat ssh.key >> .ssh/id_rsa
@@ -52,8 +51,11 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get install libvirt-clients virtinst libvirt-daemon-system
         sudo systemctl start libvirtd
         sudo bash -x lib-virt-provision.sh
-        until ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 echo "ssh key works!"
+        until ssh -i ssh.key -o "StrictHostKeyChecking=no" core@10.20.15.2 echo "sudo systemctl status haproxy"
         do
+          curl -kv https://10.20.15.2:443
+          curl -kv https://10.20.15.2:6443
+          curl -kv https://10.20.15.2:22623
           sleep 10
         done
         exit 1
